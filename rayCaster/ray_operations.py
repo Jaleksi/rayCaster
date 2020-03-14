@@ -1,6 +1,8 @@
 from math import sqrt
+'''
+https://stackoverflow.com/questions/3838329/how-can-i-check-if-two-segments-intersect
+'''
 
-# https://stackoverflow.com/questions/3838329/how-can-i-check-if-two-segments-intersect
 
 def ccw(A, B, C):
     '''Counterclockwise'''
@@ -28,8 +30,15 @@ def intersect_point(ray_start, ray_end, barrier_start, barrier_end):
                * (bs_x * be_y - bs_y * be_x))
     p2_y = int((rs_x - re_x) * (bs_y - be_y) - (rs_y - re_y) * (bs_x - be_x))
 
-    return (p1_x / p2_x, p1_y /p2_y)
+    return (p1_x / p2_x, p1_y / p2_y)
 
 
 def points_distance(p1, p2):
     return sqrt(((p1[0] - p2[0]) ** 2) + ((p1[1] - p2[1]) ** 2))
+
+
+def translate(value, origin_min, origin_max, map_min, map_max):
+    origin_span = origin_min - origin_max
+    map_span = map_min - map_max
+    scaled_value = float(value - origin_min) / float(origin_span)
+    return int(map_min + (scaled_value * map_span))
