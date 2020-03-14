@@ -14,10 +14,11 @@ class Roamer:
         self.x = x
         self.y = y
         self.dir_angle = math.radians(0)
+        self.view_distance = 300
 
     def turn(self, direction):
         self.dir_angle += math.radians(direction)
 
-    def move(self, distance):
-        self.x = self.x + int(distance * math.cos(self.dir_angle))
-        self.y = self.y + int(distance * math.sin(self.dir_angle))
+    def move(self, speed):
+        self.x = self.x + int(speed * math.cos(self.dir_angle))
+        self.y = self.y + int(speed * math.sin(self.dir_angle))
