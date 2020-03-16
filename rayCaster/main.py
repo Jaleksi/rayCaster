@@ -5,8 +5,7 @@ import pygame as pg
 
 from .inputs import handle_inputs
 from .entities import Barrier, Roamer
-from .ray_operations import (intersects, intersect_point, points_distance, translate,
-                             calculate_endpoint)
+from .ray_operations import translate, calculate_endpoint, get_closest_intersection
 
 
 class Game:
@@ -35,7 +34,10 @@ class Game:
     def draw(self):
         # Draw firstperson-view
         for i, angle in enumerate(self.roamer.ray_angles):
-            end_pos, distance = self.get_ray_endpoint(angle)
+            end_pos, distance = get_closest_intersection(self.roamer.x, self.roamer.y,
+                                                         angle, self.barriers,
+                                                         self.roamer.view_distance,
+                                                         self.roamer.dir_angle)
             if not end_pos:
                 continue
             distance = distance * math.cos(angle)
@@ -66,23 +68,3 @@ class Game:
             mm_end_y = int(translate(b.end_pos[1], 0, 500, 400, 500))
             pg.draw.line(self.screen, (255, 255, 255),
                          (mm_start_x, mm_start_y), (mm_end_x, mm_end_y), 1)
-
-    def get_ray_endpoint(self, angle):
-        ray_start_point = (self.roamer.x, self.roamer.y)
-        ray_end_point = calculate_endpoint(ray_start_point[0], ray_start_point[1],
-                                           angle, self.roamer.view_distance,
-                                           self.roamer.dir_angle)
-        distance_to_closest_intersect = 999999999
-        intersecting_point = None
-        for barrier in self.barriers:
-            if not intersects(ray_start_point, ray_end_point,
-                              barrier.start_pos, barrier.end_pos):
-                continue
-            found_intersect = intersect_point(ray_start_point, ray_end_point,
-                                              barrier.start_pos, barrier.end_pos)
-            distance = points_distance(ray_start_point, found_intersect)
-            if distance > distance_to_closest_intersect:
-                continue
-            distance_to_closest_intersect = distance
-            intersecting_point = found_intersect
-        return intersecting_point, distance_to_closest_intersect

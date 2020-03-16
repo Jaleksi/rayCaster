@@ -48,3 +48,21 @@ def calculate_endpoint(x, y, angle, view_distance, roamer_dir):
     end_x = x + int(view_distance * math.cos(roamer_dir + angle))
     end_y = y + int(view_distance * math.sin(roamer_dir + angle))
     return (end_x, end_y)
+
+
+def get_closest_intersection(x, y, angle, barriers, view_distance, dir_angle):
+    distance_to_closest_intersection = math.inf
+    closest_intersection = None
+    ray_start = (x, y)
+    ray_end = calculate_endpoint(x, y, angle, view_distance, dir_angle)
+    for barrier in barriers:
+        if not intersects(ray_start, ray_end, barrier.start_pos, barrier.end_pos):
+            continue
+        found_intersect = intersect_point(ray_start, ray_end,
+                                          barrier.start_pos, barrier.end_pos)
+        distance = points_distance(ray_start, found_intersect)
+        if distance > distance_to_closest_intersection:
+            continue
+        distance_to_closest_intersection = distance
+        closest_intersection = found_intersect
+    return closest_intersection, distance_to_closest_intersection
