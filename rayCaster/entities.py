@@ -14,7 +14,7 @@ class Roamer:
         self.x = x
         self.y = y
         self.dir_angle = math.radians(0)
-        self.view_distance = 400
+        self.view_distance = 100
         self.fov = 50
         self.ray_angles = [math.radians(i) for i in range(-self.fov//2, self.fov//2)]
 

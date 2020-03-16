@@ -1,4 +1,4 @@
-from math import sqrt
+import math
 '''
 https://stackoverflow.com/questions/3838329/how-can-i-check-if-two-segments-intersect
 '''
@@ -34,7 +34,7 @@ def intersect_point(ray_start, ray_end, barrier_start, barrier_end):
 
 
 def points_distance(p1, p2):
-    return sqrt(((p1[0] - p2[0]) ** 2) + ((p1[1] - p2[1]) ** 2))
+    return math.sqrt(((p1[0] - p2[0]) ** 2) + ((p1[1] - p2[1]) ** 2))
 
 
 def translate(value, origin_min, origin_max, map_min, map_max):
@@ -42,3 +42,9 @@ def translate(value, origin_min, origin_max, map_min, map_max):
     map_span = map_min - map_max
     scaled_value = float(value - origin_min) / float(origin_span)
     return int(map_min + (scaled_value * map_span))
+
+
+def calculate_endpoint(x, y, angle, view_distance, roamer_dir):
+    end_x = x + int(view_distance * math.cos(roamer_dir + angle))
+    end_y = y + int(view_distance * math.sin(roamer_dir + angle))
+    return (end_x, end_y)
