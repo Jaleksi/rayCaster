@@ -1,6 +1,4 @@
-from random import randint
 import math
-
 import pygame as pg
 
 from .inputs import handle_inputs
@@ -12,8 +10,8 @@ class Game:
     def __init__(self, screen, clock):
         self.screen = screen
         self.clock = clock
-        self.roamer = Roamer(self, 250, 250)
-        self.barriers = self.new_barriers(6)
+        self.roamer = Roamer(250, 250)
+        self.barriers = [Barrier() for _ in range(6)]
 
     def main_loop(self):
         while True:
@@ -22,14 +20,6 @@ class Game:
             self.draw()
             self.clock.tick(20)
             pg.display.update()
-
-    def new_barriers(self, number_of_barriers):
-        barriers = []
-        for _ in range(number_of_barriers):
-            start_pos = (randint(10, 490), randint(10, 490))
-            end_pos = (randint(10, 490), randint(10, 490))
-            barriers.append(Barrier(self, start_pos, end_pos))
-        return barriers
 
     def draw(self):
         # Draw firstperson-view

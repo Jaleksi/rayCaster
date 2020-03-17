@@ -1,16 +1,15 @@
 import math
+from random import randint
 
 
 class Barrier:
-    def __init__(self, game, start_pos, end_pos):
-        self.game = game
-        self.start_pos = start_pos
-        self.end_pos = end_pos
+    def __init__(self):
+        self.start_pos = (randint(0, 500), randint(0, 500))
+        self.end_pos = (randint(0, 500), randint(0, 500))
 
 
 class Roamer:
-    def __init__(self, game, x, y):
-        self.game = game
+    def __init__(self, x, y):
         self.x = x
         self.y = y
         self.dir_angle = math.radians(0)
