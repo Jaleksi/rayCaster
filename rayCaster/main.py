@@ -40,7 +40,6 @@ class Game:
                                                          self.roamer.dir_angle)
             if not end_pos:
                 continue
-            distance = distance * math.cos(angle)
             c = translate(distance, 0, self.roamer.view_distance, 255, 0)
             w = 15
             h = translate(distance, 0, self.roamer.view_distance, 500, 0)
