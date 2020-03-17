@@ -40,9 +40,10 @@ class Game:
                                                          self.roamer.dir_angle)
             if not end_pos:
                 continue
+            distance = distance * math.cos(angle)
             c = translate(distance, 0, self.roamer.view_distance, 255, 0)
             w = 15
-            h = translate(distance, 0, self.roamer.view_distance, 500, 0)
+            h = translate(distance, 0, self.roamer.view_distance, 750, 0)
             x = translate(i, 0, len(self.roamer.ray_angles), 0, 500)
             y = translate(distance, 0, self.roamer.view_distance, 0, 250)
             pg.draw.rect(self.screen, (c, c, c), (x, y, w, h), 0)
