@@ -9,11 +9,11 @@ class Barrier:
         self.start_pos = (randint(0, 500), randint(0, 500))
         self.end_pos = (randint(0, 500), randint(0, 500))
 
-    def coordinates_for_minimap(self):
-        start_x = int(translate(self.start_pos[0], 0, 500, 400, 500))
-        start_y = int(translate(self.start_pos[1], 0, 500, 400, 500))
-        end_x = int(translate(self.end_pos[0], 0, 500, 400, 500))
-        end_y = int(translate(self.end_pos[1], 0, 500, 400, 500))
+    def coordinates_for_minimap(self, width, height):
+        start_x = int(translate(self.start_pos[0], 0, width, width - 100, width))
+        start_y = int(translate(self.start_pos[1], 0, height, height - 100, height))
+        end_x = int(translate(self.end_pos[0], 0, width, width - 100, width))
+        end_y = int(translate(self.end_pos[1], 0, height, height - 100, height))
         return (start_x, start_y), (end_x, end_y)
 
 
@@ -33,9 +33,9 @@ class Roamer:
         self.x = self.x + int(speed * math.cos(self.dir_angle))
         self.y = self.y + int(speed * math.sin(self.dir_angle))
 
-    def coordinates_for_minimap(self):
-        mapped_x = int(translate(self.x, 0, 500, 400, 500))
-        mapped_y = int(translate(self.y, 0, 500, 400, 500))
+    def coordinates_for_minimap(self, width, height):
+        mapped_x = int(translate(self.x, 0, width, width - 100, width))
+        mapped_y = int(translate(self.y, 0, height, height - 100, height))
         return (mapped_x, mapped_y)
 
 
@@ -51,8 +51,8 @@ class Ray:
             self.parent.dir_angle + self.angle))
         return (end_x, end_y)
 
-    def minimap_endpoint(self):
+    def minimap_endpoint(self, width, height):
         end_p = self.endpoint()
-        mapped_x = int(translate(end_p[0], 0, 500, 400, 500))
-        mapped_y = int(translate(end_p[1], 0, 500, 400, 500))
+        mapped_x = int(translate(end_p[0], 0, width, width - 100, width))
+        mapped_y = int(translate(end_p[1], 0, height, height - 100, height))
         return (mapped_x, mapped_y)
