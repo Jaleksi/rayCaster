@@ -24,7 +24,7 @@ class Roamer:
         self.dir_angle = math.radians(0)
         self.view_distance = 100
         self.fov = 50
-        self.rays = [Ray(self, i) for i in range(-self.fov//2, self.fov//2)]
+        self.rays = [Ray(self, angle, i) for i, angle in enumerate(range(-self.fov//2, self.fov//2))]
 
     def turn(self, direction):
         self.dir_angle += math.radians(direction)
@@ -40,9 +40,10 @@ class Roamer:
 
 
 class Ray:
-    def __init__(self, parent, angle):
+    def __init__(self, parent, angle, index):
         self.parent = parent
         self.angle = math.radians(angle)
+        self.index = index
 
     def endpoint(self):
         end_x = self.parent.x + int(self.parent.view_distance * math.cos(
@@ -73,3 +74,14 @@ class Ray:
             distance_to_closest_intersection = distance
             closest_intersection = found_intersect
         return closest_intersection, distance_to_closest_intersection
+
+    def get_rect(self, distance, w, h):
+        distance *= math.cos(self.angle)
+        vd = self.parent.view_distance
+
+        color = translate(distance, 0, vd, 255, 0)
+        width = 15
+        height = translate(distance, 0, vd, h * 1.5, 0)
+        x = translate(self.index, 0, len(self.parent.rays), 0, w)
+        y = translate(distance, 0, vd, 0, h // 2)
+        return (x, y, width, height), (color, color, color)

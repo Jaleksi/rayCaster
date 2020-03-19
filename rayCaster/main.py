@@ -1,9 +1,7 @@
-import math
 import pygame as pg
 
 from .inputs import handle_inputs
 from .entities import Barrier, Roamer
-from .ray_operations import translate
 
 
 class Game:
@@ -28,13 +26,8 @@ class Game:
             end_pos, distance = ray.get_closest_intersection(self.barriers)
             if not end_pos:
                 continue
-            distance = distance * math.cos(ray.angle)
-            c = translate(distance, 0, self.roamer.view_distance, 255, 0)
-            w = 15
-            h = translate(distance, 0, self.roamer.view_distance, self.height * 1.5, 0)
-            x = translate(i, 0, len(self.roamer.rays), 0, self.width)
-            y = translate(distance, 0, self.roamer.view_distance, 0, self.height // 2)
-            pg.draw.rect(self.screen, (c, c, c), (x, y, w, h), 0)
+            rect_dimensions, color = ray.get_rect(distance, self.width, self.height)
+            pg.draw.rect(self.screen, color, rect_dimensions)
 
     def draw_minimap(self):
         pg.draw.rect(self.screen, (255, 0, 0), (self.width - 100, self.height - 100,
