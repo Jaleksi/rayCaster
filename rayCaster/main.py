@@ -3,7 +3,7 @@ import pygame as pg
 
 from .inputs import handle_inputs
 from .entities import Barrier, Roamer
-from .ray_operations import translate, calculate_endpoint, get_closest_intersection
+from .ray_operations import translate, get_closest_intersection
 
 
 class Game:
@@ -17,44 +17,29 @@ class Game:
         while True:
             handle_inputs(self.roamer)
             self.screen.fill((0, 0, 0))
-            self.draw()
+            self.draw_first_person_view()
+            self.draw_minimap()
             self.clock.tick(20)
             pg.display.update()
 
-    def draw(self):
-        # Draw firstperson-view
-        for i, angle in enumerate(self.roamer.ray_angles):
-            end_pos, distance = get_closest_intersection(self.roamer.x, self.roamer.y,
-                                                         angle, self.barriers,
-                                                         self.roamer.view_distance,
-                                                         self.roamer.dir_angle)
+    def draw_first_person_view(self):
+        for i, ray in enumerate(self.roamer.rays):
+            end_pos, distance = get_closest_intersection(ray, self.barriers)
             if not end_pos:
                 continue
-            distance = distance * math.cos(angle)
+            distance = distance * math.cos(ray.angle)
             c = translate(distance, 0, self.roamer.view_distance, 255, 0)
             w = 15
             h = translate(distance, 0, self.roamer.view_distance, 750, 0)
-            x = translate(i, 0, len(self.roamer.ray_angles), 0, 500)
+            x = translate(i, 0, len(self.roamer.rays), 0, 500)
             y = translate(distance, 0, self.roamer.view_distance, 0, 250)
             pg.draw.rect(self.screen, (c, c, c), (x, y, w, h), 0)
-        # Draw minimap
+
+    def draw_minimap(self):
         pg.draw.rect(self.screen, (255, 0, 0), (400, 400, 100, 100), 0)
         for i in [0, -1]:
-            angle = self.roamer.ray_angles[i]
-            ray_end = calculate_endpoint(self.roamer.x, self.roamer.y,
-                                         angle, self.roamer.view_distance,
-                                         self.roamer.dir_angle)
-            roamer_mapped_x = int(translate(self.roamer.x, 0, 500, 400, 500))
-            roamer_mapped_y = int(translate(self.roamer.y, 0, 500, 400, 500))
-            ray_end_mapped_x = int(translate(ray_end[0], 0, 500, 400, 500))
-            ray_end_mapped_y = int(translate(ray_end[1], 0, 500, 400, 500))
-            pg.draw.line(self.screen, (0, 0, 0), (roamer_mapped_x, roamer_mapped_y),
-                         (ray_end_mapped_x, ray_end_mapped_y), 1)
-
-        for b in self.barriers:
-            mm_start_x = int(translate(b.start_pos[0], 0, 500, 400, 500))
-            mm_start_y = int(translate(b.start_pos[1], 0, 500, 400, 500))
-            mm_end_x = int(translate(b.end_pos[0], 0, 500, 400, 500))
-            mm_end_y = int(translate(b.end_pos[1], 0, 500, 400, 500))
-            pg.draw.line(self.screen, (255, 255, 255),
-                         (mm_start_x, mm_start_y), (mm_end_x, mm_end_y), 1)
+            pg.draw.line(self.screen, (0, 0, 0), self.roamer.coordinates_for_minimap(),
+                         self.roamer.rays[i].minimap_endpoint(), 1)
+        for barrier in self.barriers:
+            mm_start, mm_end = barrier.coordinates_for_minimap()
+            pg.draw.line(self.screen, (255, 255, 255), mm_start, mm_end, 1)

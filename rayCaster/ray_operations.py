@@ -44,17 +44,11 @@ def translate(value, origin_min, origin_max, map_min, map_max):
     return int(map_min + (scaled_value * map_span))
 
 
-def calculate_endpoint(x, y, angle, view_distance, roamer_dir):
-    end_x = x + int(view_distance * math.cos(roamer_dir + angle))
-    end_y = y + int(view_distance * math.sin(roamer_dir + angle))
-    return (end_x, end_y)
-
-
-def get_closest_intersection(x, y, angle, barriers, view_distance, dir_angle):
+def get_closest_intersection(ray, barriers):
     distance_to_closest_intersection = math.inf
     closest_intersection = None
-    ray_start = (x, y)
-    ray_end = calculate_endpoint(x, y, angle, view_distance, dir_angle)
+    ray_start = (ray.parent.x, ray.parent.y)
+    ray_end = ray.endpoint()
     for barrier in barriers:
         if not intersects(ray_start, ray_end, barrier.start_pos, barrier.end_pos):
             continue
