@@ -24,7 +24,8 @@ class Roamer:
         self.dir_angle = math.radians(0)
         self.view_distance = 100
         self.fov = 50
-        self.rays = [Ray(self, angle, i) for i, angle in enumerate(range(-self.fov//2, self.fov//2))]
+        self.rays = [Ray(self, angle, i) for i, angle in enumerate(range(-self.fov//2,
+                                                                         self.fov//2))]
 
     def turn(self, direction):
         self.dir_angle += math.radians(direction)

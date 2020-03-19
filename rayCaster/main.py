@@ -8,9 +8,9 @@ class Game:
     def __init__(self, screen, clock):
         self.screen = screen
         self.clock = clock
-        self.roamer = Roamer(250, 250)
-        self.barriers = [Barrier() for _ in range(6)]
         self.width, self.height = pg.display.get_surface().get_size()
+        self.roamer = Roamer(self.width // 2, self.height // 2)
+        self.barriers = [Barrier() for _ in range(6)]
 
     def main_loop(self):
         while True:
