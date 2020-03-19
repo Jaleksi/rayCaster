@@ -1,7 +1,7 @@
 import math
 from random import randint
 
-from .ray_operations import translate
+from .ray_operations import translate, intersects, points_distance, intersect_point
 
 
 class Barrier:
@@ -56,3 +56,20 @@ class Ray:
         mapped_x = int(translate(end_p[0], 0, width, width - 100, width))
         mapped_y = int(translate(end_p[1], 0, height, height - 100, height))
         return (mapped_x, mapped_y)
+
+    def get_closest_intersection(self, barriers):
+        distance_to_closest_intersection = math.inf
+        closest_intersection = None
+        ray_start = (self.parent.x, self.parent.y)
+        ray_end = self.endpoint()
+        for barrier in barriers:
+            if not intersects(ray_start, ray_end, barrier.start_pos, barrier.end_pos):
+                continue
+            found_intersect = intersect_point(ray_start, ray_end,
+                                              barrier.start_pos, barrier.end_pos)
+            distance = points_distance(ray_start, found_intersect)
+            if distance > distance_to_closest_intersection:
+                continue
+            distance_to_closest_intersection = distance
+            closest_intersection = found_intersect
+        return closest_intersection, distance_to_closest_intersection

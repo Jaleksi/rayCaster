@@ -4,9 +4,9 @@ https://stackoverflow.com/questions/3838329/how-can-i-check-if-two-segments-inte
 '''
 
 
-def ccw(A, B, C):
+def ccw(a, b, c):
     '''Counterclockwise'''
-    return (C[1] - A[1]) * (B[0] - A[0]) > (B[1] - A[1]) * (C[0] - A[0])
+    return (c[1] - a[1]) * (b[0] - a[0]) > (b[1] - a[1]) * (c[0] - a[0])
 
 
 def intersects(a, b, c, d):
@@ -42,21 +42,3 @@ def translate(value, origin_min, origin_max, map_min, map_max):
     map_span = map_min - map_max
     scaled_value = float(value - origin_min) / float(origin_span)
     return int(map_min + (scaled_value * map_span))
-
-
-def get_closest_intersection(ray, barriers):
-    distance_to_closest_intersection = math.inf
-    closest_intersection = None
-    ray_start = (ray.parent.x, ray.parent.y)
-    ray_end = ray.endpoint()
-    for barrier in barriers:
-        if not intersects(ray_start, ray_end, barrier.start_pos, barrier.end_pos):
-            continue
-        found_intersect = intersect_point(ray_start, ray_end,
-                                          barrier.start_pos, barrier.end_pos)
-        distance = points_distance(ray_start, found_intersect)
-        if distance > distance_to_closest_intersection:
-            continue
-        distance_to_closest_intersection = distance
-        closest_intersection = found_intersect
-    return closest_intersection, distance_to_closest_intersection

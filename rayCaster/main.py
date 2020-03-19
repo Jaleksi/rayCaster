@@ -3,7 +3,7 @@ import pygame as pg
 
 from .inputs import handle_inputs
 from .entities import Barrier, Roamer
-from .ray_operations import translate, get_closest_intersection
+from .ray_operations import translate
 
 
 class Game:
@@ -25,7 +25,7 @@ class Game:
 
     def draw_first_person_view(self):
         for i, ray in enumerate(self.roamer.rays):
-            end_pos, distance = get_closest_intersection(ray, self.barriers)
+            end_pos, distance = ray.get_closest_intersection(self.barriers)
             if not end_pos:
                 continue
             distance = distance * math.cos(ray.angle)
