@@ -45,29 +45,29 @@ class Ray:
         self.parent = parent
         self.angle = math.radians(angle)
         self.index = index
+        self.endpoint = None
 
-    def endpoint(self):
+    def calculate_endpoint(self):
         end_x = self.parent.x + int(self.parent.view_distance * math.cos(
             self.parent.dir_angle + self.angle))
         end_y = self.parent.y + int(self.parent.view_distance * math.sin(
             self.parent.dir_angle + self.angle))
-        return (end_x, end_y)
+        self.endpoint = (end_x, end_y)
 
     def minimap_endpoint(self, width, height):
-        end_p = self.endpoint()
-        mapped_x = int(translate(end_p[0], 0, width, width - 100, width))
-        mapped_y = int(translate(end_p[1], 0, height, height - 100, height))
+        mapped_x = int(translate(self.endpoint[0], 0, width, width - 100, width))
+        mapped_y = int(translate(self.endpoint[1], 0, height, height - 100, height))
         return (mapped_x, mapped_y)
 
     def get_closest_intersection(self, barriers):
+        self.calculate_endpoint()
         distance_to_closest_intersection = math.inf
         closest_intersection = None
         ray_start = (self.parent.x, self.parent.y)
-        ray_end = self.endpoint()
         for barrier in barriers:
-            if not intersects(ray_start, ray_end, barrier.start_pos, barrier.end_pos):
+            if not intersects(ray_start, self.endpoint, barrier.start_pos, barrier.end_pos):
                 continue
-            found_intersect = intersect_point(ray_start, ray_end,
+            found_intersect = intersect_point(ray_start, self.endpoint,
                                               barrier.start_pos, barrier.end_pos)
             distance = points_distance(ray_start, found_intersect)
             if distance > distance_to_closest_intersection:

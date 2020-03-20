@@ -18,8 +18,14 @@ class Game:
             self.screen.fill((0, 0, 0))
             self.draw_first_person_view()
             self.draw_minimap()
+            self.draw_fps()
             self.clock.tick(20)
             pg.display.update()
+
+    def draw_fps(self):
+        fps_text = 'FPS: ' + '{0:.2f}'.format(self.clock.get_fps())
+        fps = pg.font.Font(None, 30).render(fps_text, True, (255, 255, 255))
+        self.screen.blit(fps, (0, 0))
 
     def draw_first_person_view(self):
         for i, ray in enumerate(self.roamer.rays):
