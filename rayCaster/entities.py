@@ -31,7 +31,7 @@ class Roamer:
     def create_rays(self):
         rays = []
         angle_difference = self.fov / self.w
-        angle = self.dir_angle / 2 * -1
+        angle = self.w / 2 * angle_difference * -1
         for i in range(self.w):
             rays.append(Ray(self, angle, i))
             angle += angle_difference
@@ -91,8 +91,8 @@ class Ray:
         vd = self.parent.view_distance
 
         color = translate(distance, 0, vd, 255, 0)
-        width = 2
+        width = 1
         height = translate(distance, 0, vd, h * 1.5, 0)
         x = self.index
-        y = translate(distance, 0, vd, 0, h // 2)
+        y = translate(distance, 0, vd, 0, h / 2)
         return (x, y, width, height), (color, color, color)
