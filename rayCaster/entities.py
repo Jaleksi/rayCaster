@@ -18,15 +18,25 @@ class Barrier:
 
 
 class Roamer:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
+    def __init__(self, width, height):
+        self.x = width // 2
+        self.y = height // 2
+        self.w = width
+        self.h = height
         self.dir_angle = math.radians(0)
         self.view_distance = 100
         self.fov = 50
-        self.rays = [Ray(self, angle, i) for i, angle in enumerate(range(-self.fov//2,
-                                                                         self.fov//2))]
+        self.rays = self.create_rays()
 
+    def create_rays(self):
+        rays = []
+        angle_difference = self.fov / self.w
+        angle = self.dir_angle / 2 * -1
+        for i in range(self.w):
+            rays.append(Ray(self, angle, i))
+            angle += angle_difference
+        return rays
+    
     def turn(self, direction):
         self.dir_angle += math.radians(direction)
 
@@ -34,9 +44,9 @@ class Roamer:
         self.x = self.x + int(speed * math.cos(self.dir_angle))
         self.y = self.y + int(speed * math.sin(self.dir_angle))
 
-    def coordinates_for_minimap(self, width, height):
-        mapped_x = int(translate(self.x, 0, width, width - 100, width))
-        mapped_y = int(translate(self.y, 0, height, height - 100, height))
+    def coordinates_for_minimap(self):
+        mapped_x = int(translate(self.x, 0, self.w, self.w - 100, self.w))
+        mapped_y = int(translate(self.y, 0, self.h, self.h - 100, self.h))
         return (mapped_x, mapped_y)
 
 
@@ -81,8 +91,8 @@ class Ray:
         vd = self.parent.view_distance
 
         color = translate(distance, 0, vd, 255, 0)
-        width = 15
+        width = 2
         height = translate(distance, 0, vd, h * 1.5, 0)
-        x = translate(self.index, 0, len(self.parent.rays), 0, w)
+        x = self.index
         y = translate(distance, 0, vd, 0, h // 2)
         return (x, y, width, height), (color, color, color)

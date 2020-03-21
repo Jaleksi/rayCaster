@@ -9,7 +9,7 @@ class Game:
         self.screen = screen
         self.clock = clock
         self.width, self.height = pg.display.get_surface().get_size()
-        self.roamer = Roamer(self.width // 2, self.height // 2)
+        self.roamer = Roamer(self.width, self.height)
         self.barriers = [Barrier() for _ in range(6)]
 
     def main_loop(self):
@@ -40,7 +40,7 @@ class Game:
                                                 100, 100), 0)
         for i in [0, -1]:
             pg.draw.line(self.screen, (0, 0, 0),
-                         self.roamer.coordinates_for_minimap(self.width, self.height),
+                         self.roamer.coordinates_for_minimap(),
                          self.roamer.rays[i].minimap_endpoint(self.width, self.height),
                          1)
         for barrier in self.barriers:
