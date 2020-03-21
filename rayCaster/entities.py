@@ -25,7 +25,7 @@ class Roamer:
         self.h = height
         self.dir_angle = math.radians(0)
         self.view_distance = 100
-        self.fov = 50
+        self.fov = 90
         self.rays = self.create_rays()
 
     def create_rays(self):
